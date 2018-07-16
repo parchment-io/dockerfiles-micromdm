@@ -2,10 +2,13 @@ FROM alpine:3.3
 
 ENV MICROMDM_VERSION=v1.3.1
 
-RUN apk --no-cache add curl && \
-    curl -L https://github.com/micromdm/micromdm/releases/download/${MICROMDM_VERSION}/micromdm-linux-amd64 -o /micromdm && \
+RUN apk --no-cache add curl zip && \
+    curl -L https://github.com/micromdm/micromdm/releases/download/${MICROMDM_VERSION}/micromdm_${MICROMDM_VERSION}.zip -o /micromdm.zip && \
+    unzip /micromdm.zip && \
+    mv /build/linux/micromdm / && \
+    rm -fr /build /micromdm.zip && \
     chmod a+x /micromdm && \
-    apk del curl
+    apk del curl zip
 
 COPY run.sh /run.sh
 

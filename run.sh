@@ -35,7 +35,7 @@ if [[ -z ${SERVER_URL} ]]; then
   exit 1
 fi
 
-runMicroMDM="micromdm serve \
+runMicroMDM="/micromdm serve \
   -apns-cert /certs/mdm_push_cert.pem \
   -apns-key /certs/ProviderPrivateKey.key \
   -apns-password='${APNS_PASSWORD}' \
@@ -44,13 +44,13 @@ runMicroMDM="micromdm serve \
   -config-path /config"
 
 # add api key if specified
-if [[ ${API_KEY} ]]; then
+if [[ ! -z "${API_KEY}" ]]; then
   runMicroMDM="${runMicroMDM} \
     -api-key ${API_KEY}"
 fi
 
 # process TLS settings
-if [[ ${TLS} = true ]]; then
+if [[ ${TLS} == "true" ]]; then
   if [[ ! -z ${TLS_CERT} && ! -z ${TLS_KEY} && -e "/certs/${TLS_CERT}" && -e "/certs/${TLS_KEY}" ]]; then
     runMicroMDM="${runMicroMDM} \
       -tls-cert '/certs/${TLS_CERT}' \
@@ -62,7 +62,7 @@ else
 fi
 
 # process debugging
-if [[ ${DEBUG} ]]; then
+if [[ ${DEBUG} == "true" ]]; then
   runMicroMDM="${runMicroMDM} \
     -http-debug"
 fi
