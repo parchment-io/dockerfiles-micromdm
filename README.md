@@ -24,8 +24,8 @@ docker run -d --restart always --name micromdm \
   -e APNS_PASSWORD=secret \
   -e SERVER_URL=https://micromdm.acme.com \
   -e API_KEY=abcdef1234567890 \
-  -e TLS_CERT=micromdm.acme.com.crt \
-  -e TLS_KEY=micromdm.acme.com.key \
+  -e TLS_CERT=/path/to/micromdm.acme.com.crt \
+  -e TLS_KEY=/path/to/micromdm.acme.com.key \
   -e TLS=true \
   -v /root/certs:/certs \
   -v /root/micromdm:/config \
@@ -44,14 +44,14 @@ APNS_PASSWORD | APNS p12 cert password
 DEBUG | Set to `true` to enable `-http_debug`
 SERVER_URL | Public HTTPS url of your server
 TLS | Set to `true` to enable HTTPS (Defaults to False)
-TLS_CERT | TLS certificate file name (within mapped /certs directory)
-TLS_KEY |TLS private key file name (within mapped /certs directory)
+TLS_CERT | TLS certificate file name
+TLS_KEY |TLS private key file name
 
 ### Mapped Volumes
 
 Path | Description
 --- | ---
-/certs | Folder containing `mdm_push_cert.pem`, `ProviderPrivateKey.key` and TLS certificates (Optional)
+/certs | Folder containing `mdm_push_cert.pem`, `ProviderPrivateKey.key`
 /config | Folder containing micromdm configuration
 /repo | Folder for http file repo
 

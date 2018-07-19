@@ -18,27 +18,12 @@
 #   /repo
 
 # peform quick checks:
-if [[ ! -e /certs/mdm_push_cert.pem ]]; then
-  echo "Please map a valid '/certs/mdm_push_cert.pem' to the container."
-  exit 1
-fi
-if [[ ! -e /certs/ProviderPrivateKey.key ]]; then
-  echo "Please map a valid '/certs/ProviderPrivateKey.key' to the container."
-  exit 1
-fi
-if [[ -z ${APNS_PASSWORD} ]]; then
-  echo "Please set the 'APNS_PASSWORD' environment variable."
-  exit 1
-fi
 if [[ -z ${SERVER_URL} ]]; then
   echo "Please set the 'SERVER_URL' environment variable."
   exit 1
 fi
 
 runMicroMDM="/micromdm serve \
-  -apns-cert /certs/mdm_push_cert.pem \
-  -apns-key /certs/ProviderPrivateKey.key \
-  -apns-password='${APNS_PASSWORD}' \
   -server-url='${SERVER_URL}' \
   -filerepo /repo \
   -config-path /config"
@@ -51,10 +36,10 @@ fi
 
 # process TLS settings
 if [[ ${TLS} == "true" ]]; then
-  if [[ ! -z ${TLS_CERT} && ! -z ${TLS_KEY} && -e "/certs/${TLS_CERT}" && -e "/certs/${TLS_KEY}" ]]; then
+  if [[ ! -z ${TLS_CERT} && ! -z ${TLS_KEY} && -e "${TLS_CERT}" && -e "${TLS_KEY}" ]]; then
     runMicroMDM="${runMicroMDM} \
-      -tls-cert '/certs/${TLS_CERT}' \
-      -tls-key '/certs/${TLS_KEY}'"
+      -tls-cert '${TLS_CERT}' \
+      -tls-key '${TLS_KEY}'"
   fi
 else
   runMicroMDM="${runMicroMDM} \
@@ -67,7 +52,7 @@ if [[ ${DEBUG} == "true" ]]; then
     -http-debug"
 fi
 
-#echo "$runMicroMDM"
+echo "$runMicroMDM"
 
 #run
 eval $runMicroMDM
